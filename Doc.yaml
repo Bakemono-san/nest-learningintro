@@ -8,6 +8,153 @@ servers:
   - url: https://nest-learningintro.vercel.app/
     description: Local server
 
+security:
+  - CookieAuth: []
+
+paths:
+  /users:
+    post:
+      summary: Create a new user
+      tags:
+        - users
+      operationId: UsersController_create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserDto"
+        required: true
+      responses:
+        "201":
+          description: The user has been successfully created.
+          content: {}
+    get:
+      summary: Get all users
+      tags:
+        - users
+      operationId: UsersController_findAll
+      responses:
+        "200":
+          description: Return all users.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CreateUserDto"
+
+  /users/{id}:
+    get:
+      summary: Get a user by ID
+      tags:
+        - users
+      operationId: UsersController_findOne
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            description: "ID of the user"
+      responses:
+        "200":
+          description: Return the user by ID.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateUserDto"
+        "404":
+          description: User not found.
+          content: {}
+
+    patch:
+      summary: Update a user by ID
+      tags:
+        - users
+      operationId: UsersController_update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            description: "ID of the user"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserDto"
+        required: true
+      responses:
+        "200":
+          description: The user has been successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateUserDto"
+        "404":
+          description: User not found.
+          content: {}
+
+    delete:
+      summary: Delete a user by ID
+      tags:
+        - users
+      operationId: UsersController_remove
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            description: "ID of the user"
+      responses:
+        "200":
+          description: The user has been successfully deleted.
+          content: {}
+        "404":
+          description: User not found.
+          content: {}
+
+  /users/login:
+    post:
+      summary: User login
+      tags:
+        - users
+      operationId: UsersController_login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: "The user email"
+                password:
+                  type: string
+                  format: password
+                  description: "The user password"
+        required: true
+      responses:
+        "200":
+          description: User successfully logged in.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  message:
+                    type: string
+                    example: "Utilisateur connecté avec succès"
+        "401":
+          description: Unauthorized, login failed.
+          content: {}
+
 components:
   securitySchemes:
     CookieAuth: # Custom name for cookie-based auth
@@ -15,103 +162,92 @@ components:
       in: cookie
       name: token
 
-security:
-  - CookieAuth: []
+  schemas:
+    CreateUserDto:
+      type: object
+      required:
+        - id
+        - name
+        - email
+        - password
+        - confirmationPassword
+        - role
+      properties:
+        id:
+          type: integer
+          description: "The user ID"
+        name:
+          type: string
+          description: "The user name"
+        email:
+          type: string
+          format: email
+          description: "The user email"
+        password:
+          type: string
+          format: password
+          description: "The user password"
+        confirmationPassword:
+          type: string
+          format: password
+          description: "Confirmation of the user password"
+        role:
+          type: string
+          enum:
+            - admin
+            - vendeur
+            - client
+          description: "The role of the user"
+        photo:
+          type: string
+          description: "The photo of the user (only for client role)"
+        totalDettes:
+          type: number
+          description: "The total debts of the user (only for client role)"
+        totalDettesPayee:
+          type: number
+          description: "The total debts paid by the user (only for client role)"
+        totalDettesRestant:
+          type: number
+          description: "The remaining debts of the user (only for client role)"
 
-paths:
-  /users:
-    get:
-      summary: Get all users
-      tags:
-        - users
-      description: Returns a list of users.
-      responses:
-        "200":
-          description: affichage des user reussie
-        "401":
-          description: Unauthorized
-        "500":
-          description: Erreur interne du serveur
-
-    post:
-      summary: Register a new user
-      tags:
-        - User
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - email
-                - password
-                - role
-                - name
-                - confimationPassword
-              properties:
-                name:
-                  type: string
-                email:
-                  type: string
-                password:
-                  type: string
-                role:
-                  type: string
-                  enum:
-                    - admin
-                    - vendeur
-                    - client
-                confirmationPassword:
-                  type: string
-      responses:
-        "201":
-          description: User registered successfully
-        "400":
-          description: Tous les champs sont obligatoires
-        "401":
-          description: Le mot de passe doit contenir au moins 8 caractères
-        "403":
-          description: Le rôle doit être 'tailleur' ou 'visiteur'
-        "405":
-          description: Les mots de passe ne correspondent pas
-        "406":
-          description: Invalid field
-        "407":
-          description: Ce email est déjà utilisé
-        "500":
-          description: Erreur lors de l'enregistrement de l'utilisateur
-
-  /login:
-    post:
-      summary: Log in a user
-      tags:
-        - User
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - email
-                - password
-              properties:
-                email:
-                  type: string
-                password:
-                  type: string
-      responses:
-        "200":
-          description: User logged in successfully
-        "401":
-          description: Invalid credentials
-
-  /logout:
-    post:
-      summary: Log out the current user
-      tags:
-        - User
-      responses:
-        "200":
-          description: User logged out successfully
+    UpdateUserDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: "The user ID"
+        name:
+          type: string
+          description: "The user name"
+        email:
+          type: string
+          format: email
+          description: "The user email"
+        password:
+          type: string
+          format: password
+          description: "The user password"
+        confirmationPassword:
+          type: string
+          format: password
+          description: "Confirmation of the user password"
+        role:
+          type: string
+          enum:
+            - admin
+            - vendeur
+            - client
+          description: "The role of the user"
+        photo:
+          type: string
+          description: "The photo of the user (only for client role)"
+        totalDettes:
+          type: number
+          description: "The total debts of the user (only for client role)"
+        totalDettesPayee:
+          type: number
+          description: "The total debts paid by the user (only for client role)"
+        totalDettesRestant:
+          type: number
+          description: "The remaining debts of the user (only for client role)"
