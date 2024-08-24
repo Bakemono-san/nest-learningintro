@@ -23,7 +23,6 @@ import { PayementsModule } from './payements/payements.module';
       global: true,
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('TOKEN') || 'bakemono',
-        signOptions: { expiresIn: '60s' },
       }),
     }),
     ConfigModule.forRoot({ isGlobal: true }),
