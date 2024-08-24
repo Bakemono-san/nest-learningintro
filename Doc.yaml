@@ -1,0 +1,117 @@
+openapi: 3.0.0
+info:
+  title: Tailor Social Network API
+  description: API documentation for the Tailor Social Network
+  version: 1.0.0
+
+servers:
+  - url: https://nest-learningintro.vercel.app/
+    description: Local server
+
+components:
+  securitySchemes:
+    CookieAuth: # Custom name for cookie-based auth
+      type: apiKey
+      in: cookie
+      name: token
+
+security:
+  - CookieAuth: []
+
+paths:
+  /users:
+    get:
+      summary: Get all users
+      tags:
+        - users
+      description: Returns a list of users.
+      responses:
+        "200":
+          description: affichage des user reussie
+        "401":
+          description: Unauthorized
+        "500":
+          description: Erreur interne du serveur
+
+    post:
+      summary: Register a new user
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+                - role
+                - name
+                - confimationPassword
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                role:
+                  type: string
+                  enum:
+                    - admin
+                    - vendeur
+                    - client
+                confirmationPassword:
+                  type: string
+      responses:
+        "201":
+          description: User registered successfully
+        "400":
+          description: Tous les champs sont obligatoires
+        "401":
+          description: Le mot de passe doit contenir au moins 8 caractères
+        "403":
+          description: Le rôle doit être 'tailleur' ou 'visiteur'
+        "405":
+          description: Les mots de passe ne correspondent pas
+        "406":
+          description: Invalid field
+        "407":
+          description: Ce email est déjà utilisé
+        "500":
+          description: Erreur lors de l'enregistrement de l'utilisateur
+
+  /login:
+    post:
+      summary: Log in a user
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: User logged in successfully
+        "401":
+          description: Invalid credentials
+
+  /logout:
+    post:
+      summary: Log out the current user
+      tags:
+        - User
+      responses:
+        "200":
+          description: User logged out successfully

@@ -27,6 +27,11 @@ export class CreateUserDto {
   password: string;
 
   @IsNotEmpty()
+  @IsStrongPassword()
+  @IsString()
+  confirmationPassword: string;
+
+  @IsNotEmpty()
   @IsEnum(['admin', 'vendeur', 'client'])
   role: 'admin' | 'vendeur' | 'client';
 
