@@ -70,7 +70,14 @@ export class UsersService {
   ) {
     const user = this.users.find((user) => user.email === userData.email);
 
-    if (!bcrypt.compareSync(user.password, userData.password)) {
+    const Correctpassword = await bcrypt.compare(
+      userData.password,
+      user.password,
+    );
+
+    console.log(Correctpassword);
+
+    if (!Correctpassword) {
       return { error: 'invallid credentials' };
     }
 

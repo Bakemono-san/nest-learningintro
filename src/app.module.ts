@@ -10,6 +10,9 @@ import { UsersModule } from './users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthMiddleware } from './auth/auth.middleware';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { DettesModule } from './dettes/dettes.module';
+import { ProduitsModule } from './produits/produits.module';
+import { PayementsModule } from './payements/payements.module';
 
 @Module({
   imports: [
@@ -24,6 +27,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
     }),
     ConfigModule.forRoot({ isGlobal: true }),
+    DettesModule,
+    ProduitsModule,
+    PayementsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -36,6 +42,6 @@ export class AppModule implements NestModule {
         { path: 'users', method: RequestMethod.POST },
         { path: 'users/login', method: RequestMethod.POST },
       )
-      .forRoutes('users');
+      .forRoutes('*');
   }
 }
