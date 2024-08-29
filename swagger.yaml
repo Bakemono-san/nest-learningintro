@@ -1,0 +1,417 @@
+openapi: 3.0.0
+paths:
+  /:
+    get:
+      operationId: AppController_root
+      parameters: []
+      responses:
+        "200":
+          description: ""
+  /users:
+    post:
+      operationId: UsersController_create
+      summary: Create a new user
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserDto"
+      responses:
+        "201":
+          description: The user has been successfully created.
+        "400":
+          description: Bad request.
+      tags: &a1
+        - users
+    get:
+      operationId: UsersController_findAll
+      summary: Retrieve all users
+      parameters: []
+      responses:
+        "200":
+          description: The list of users has been successfully retrieved.
+      tags: *a1
+  /users/{id}:
+    get:
+      operationId: UsersController_findOne
+      summary: Retrieve a user by ID
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: The user has been successfully retrieved.
+        "404":
+          description: User not found.
+      tags: *a1
+    patch:
+      operationId: UsersController_update
+      summary: Update a user by ID
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserDto"
+      responses:
+        "200":
+          description: The user has been successfully updated.
+        "404":
+          description: User not found.
+      tags: *a1
+    delete:
+      operationId: UsersController_remove
+      summary: Delete a user by ID
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: The user has been successfully deleted.
+        "404":
+          description: User not found.
+      tags: *a1
+  /users/login:
+    post:
+      operationId: UsersController_login
+      summary: User login
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: user@example.com
+                password:
+                  type: string
+                  example: password123
+              required:
+                - email
+                - password
+      responses:
+        "200":
+          description: The user has been successfully logged in.
+        "401":
+          description: Invalid credentials.
+      tags: *a1
+  /dettes:
+    post:
+      operationId: DettesController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateDetteDto"
+      responses:
+        "201":
+          description: ""
+    get:
+      operationId: DettesController_findAll
+      parameters: []
+      responses:
+        "200":
+          description: ""
+  /dettes/{id}:
+    get:
+      operationId: DettesController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+    patch:
+      operationId: DettesController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateDetteDto"
+      responses:
+        "200":
+          description: ""
+    delete:
+      operationId: DettesController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+  /produits:
+    post:
+      operationId: ProduitsController_create
+      summary: Create a new product
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProduitDto"
+      responses:
+        "201":
+          description: The product has been successfully created.
+        "400":
+          description: Bad request.
+      tags: &a2
+        - produits
+    get:
+      operationId: ProduitsController_findAll
+      summary: Retrieve all products
+      parameters: []
+      responses:
+        "200":
+          description: The list of products has been successfully retrieved.
+      tags: *a2
+  /produits/{id}:
+    get:
+      operationId: ProduitsController_findOne
+      summary: Retrieve a product by ID
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: The product has been successfully retrieved.
+        "404":
+          description: Product not found.
+      tags: *a2
+    patch:
+      operationId: ProduitsController_update
+      summary: Update a product by ID
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProduitDto"
+      responses:
+        "200":
+          description: The product has been successfully updated.
+        "404":
+          description: Product not found.
+      tags: *a2
+    delete:
+      operationId: ProduitsController_remove
+      summary: Delete a product by ID
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        "200":
+          description: The product has been successfully deleted.
+        "404":
+          description: Product not found.
+      tags: *a2
+  /payements:
+    post:
+      operationId: PayementsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePayementDto"
+      responses:
+        "201":
+          description: ""
+    get:
+      operationId: PayementsController_findAll
+      parameters: []
+      responses:
+        "200":
+          description: ""
+  /payements/{id}:
+    get:
+      operationId: PayementsController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+    patch:
+      operationId: PayementsController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePayementDto"
+      responses:
+        "200":
+          description: ""
+    delete:
+      operationId: PayementsController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+info:
+  title: Gestion Dettes
+  description: une appli pour la gestion des dettes
+  version: "1.0"
+  contact: {}
+tags:
+  - name: Dettes
+    description: ""
+servers: []
+components:
+  schemas:
+    CreateUserDto:
+      type: object
+      properties:
+        id:
+          type: number
+          description: Unique identifier for the user
+          example: 1
+        name:
+          type: string
+          description: Full name of the user
+          example: John Doe
+        email:
+          type: string
+          description: Email address of the user
+          example: john.doe@example.com
+        password:
+          type: string
+          description: Strong password for the user account
+          example: P@ssw0rd!
+        confirmationPassword:
+          type: string
+          description: Confirmation of the strong password for the user account
+          example: P@ssw0rd!
+        role:
+          type: string
+          description: Role of the user in the system
+          example: admin
+          enum:
+            - admin
+            - vendeur
+            - client
+        photo:
+          type: string
+          description: Photo of the user (required if role is client)
+          example: photo.jpg
+        totalDettes:
+          type: number
+          description: Total debts of the user (required if role is client)
+          example: 1000
+        totalDettesPayee:
+          type: number
+          description: Total debts paid by the user (required if role is client)
+          example: 500
+        totalDettesRestant:
+          type: number
+          description: Remaining debts of the user (required if role is client)
+          example: 500
+      required:
+        - id
+        - name
+        - email
+        - password
+        - confirmationPassword
+        - role
+    UpdateUserDto:
+      type: object
+      properties: {}
+    CreateDetteDto:
+      type: object
+      properties: {}
+    UpdateDetteDto:
+      type: object
+      properties: {}
+    CreateProduitDto:
+      type: object
+      properties:
+        id:
+          type: number
+          description: Unique identifier for the product
+          example: 1
+        libelle:
+          type: string
+          description: Name or label of the product
+          example: Laptop
+        quantite:
+          type: number
+          description: Quantity of the product in stock
+          example: 50
+        prix:
+          type: number
+          description: Price of the product
+          example: 499.99
+      required:
+        - id
+        - libelle
+        - quantite
+        - prix
+    UpdateProduitDto:
+      type: object
+      properties: {}
+    CreatePayementDto:
+      type: object
+      properties: {}
+    UpdatePayementDto:
+      type: object
+      properties: {}
