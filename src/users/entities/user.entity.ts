@@ -1,52 +1,35 @@
-import {
-  IsEmail,
-  IsEnum,
-  IsNotEmpty,
-  IsNumber,
-  IsString,
-  IsStrongPassword,
-  ValidateIf,
-} from 'class-validator';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
+@Entity()
 export class User {
-  @IsNumber()
-  @IsNotEmpty()
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @IsNotEmpty()
-  @IsString()
+  @Column()
   name: string;
 
-  @IsNotEmpty()
-  @IsEmail()
+  @Column()
   email: string;
 
-  @IsNotEmpty()
-  @IsStrongPassword()
-  @IsString()
+  @Column()
   password: string;
 
-  @IsNotEmpty()
-  @IsEnum(['admin', 'vendeur', 'client'])
+  @Column({
+    type: 'enum',
+    enum: ['admin', 'vendeur', 'client'],
+    default: 'client',
+  })
   role: 'admin' | 'vendeur' | 'client';
 
-  @ValidateIf((o) => o.role === 'client')
-  @IsNotEmpty()
-  @IsString()
+  @Column({ nullable: true })
   photo: string;
 
-  @ValidateIf((o) => o.role === 'client')
-  @IsNotEmpty()
-  @IsNumber()
+  @Column({ nullable: true })
   totalDettes: number;
 
-  @ValidateIf((o) => o.role === 'client')
-  @IsNotEmpty()
-  @IsNumber()
+  @Column({ nullable: true })
   totalDettesPayee: number;
 
-  @ValidateIf((o) => o.role === 'client')
-  @IsNotEmpty()
-  @IsNumber()
+  @Column({ nullable: true })
   totalDettesRestant: number;
 }
