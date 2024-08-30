@@ -23,8 +23,6 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  const yamlDocument = SwaggerModule.createDocument(app, config);
-  writeFileSync('./swagger.yaml', yaml.stringify(yamlDocument));
   SwaggerModule.setup('api', app, document);
   await app.listen(3000);
 }
