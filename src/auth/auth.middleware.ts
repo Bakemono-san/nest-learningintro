@@ -25,6 +25,7 @@ export class AuthMiddleware implements NestMiddleware {
 
     // Vérifiez si le chemin de la requête doit être exclu
     const isExcluded = excludedPaths.some((path) => req.path.startsWith(path));
+    console.log(req.path);
 
     if (isExcluded) {
       return next();
