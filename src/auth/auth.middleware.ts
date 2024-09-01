@@ -11,6 +11,11 @@ export class AuthMiddleware implements NestMiddleware {
   use(req: any, res: any, next: () => void) {
     const token = req.cookies.token ? req.cookies.token : null;
     //console.log(token);
+    if (req.path.startsWith('/api')) {
+      // Skip authentication for Swagger routes
+      return next();
+    }
+
     if (!token) {
       return res
         .status(401)
