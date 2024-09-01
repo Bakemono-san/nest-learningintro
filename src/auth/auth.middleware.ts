@@ -24,11 +24,11 @@ export class AuthMiddleware implements NestMiddleware {
     ];
 
     // Vérifiez si le chemin de la requête doit être exclu
-    const isExcluded = excludedPaths.some((path) => req.path == path);
+    const isExcluded = excludedPaths.some((path) => req.path === path);
     console.log(req.path);
 
     if (isExcluded) {
-      next();
+      return next();
     }
 
     if (!token) {
