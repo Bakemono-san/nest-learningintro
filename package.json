@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build:swagger": "ts-node swaggerGenerator.ts",
+    "build:swagger": "ts-node generate-swagger.ts",
     "build": "npm run build:swagger && nest build",
     "start": "nest start",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
