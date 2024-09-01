@@ -34,7 +34,7 @@ export class AuthMiddleware implements NestMiddleware {
     if (!token) {
       return res
         .status(401)
-        .json({ message: 'No token, authorization denied' });
+        .json({ message: 'No token, authorization denied', path: req.path });
     }
 
     try {
