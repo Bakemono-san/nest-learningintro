@@ -20,7 +20,7 @@ export class AuthMiddleware implements NestMiddleware {
       '/swagger-resources',
       '/api/swagger-ui-bundle.js',
       '/api/swagger-ui-standalone-preset.js',
-      '/api/swagger-ui.css',
+      '/',
     ];
 
     // Vérifiez si le chemin de la requête doit être exclu
