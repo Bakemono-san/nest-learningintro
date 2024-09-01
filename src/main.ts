@@ -5,12 +5,17 @@ import cookieParser from 'cookie-parser';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import yaml from 'yaml';
+import { writeFileSync } from 'fs';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
-  app.useStaticAssets(join(__dirname, '..', 'public')); // Serve static files from 'public'
+
+  // Serve static files from the 'public' directory
+  app.useStaticAssets(join(__dirname, '..', 'public'));
+
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
   app.setViewEngine('ejs');
 
@@ -22,6 +27,12 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
+  const yamlDocument = yaml.stringify(document);
+
+  // Write the Swagger YAML file to the 'public' directory
+  writeFileSync('./public/swagger.yaml', yamlDocument);
+
+  // Setup Swagger UI
   SwaggerModule.setup('api', app, document);
 
   await app.listen(3000);
