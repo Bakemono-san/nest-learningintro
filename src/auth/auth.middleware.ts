@@ -8,14 +8,25 @@ export class AuthMiddleware implements NestMiddleware {
     private jwt: JwtService,
     private configService: ConfigService,
   ) {}
+
   use(req: any, res: any, next: () => void) {
-    const token = req.cookies.token ? req.cookies.token : null;
-    //console.log(token);
-    if (req.path.startsWith('/api')) {
-      // Skip authentication for Swagger routes
+    const token = req.cookies.token || null;
+
+    // Define Swagger and public routes that should not require authentication
+    const publicRoutes = [
+      '/swagger-ui.html',
+      '/swagger-ui/',
+      '/api/swagger-ui-bundle.js',
+      '/api/swagger-ui-standalone-preset.js',
+      '/api/swagger-ui.css',
+    ];
+
+    // Check if the request path matches any public route
+    if (publicRoutes.some((route) => req.path.startsWith(route))) {
       return next();
     }
 
+    // Check for token and verify if it's provided
     if (!token) {
       return res
         .status(401)
