@@ -5,7 +5,11 @@ import cookieParser from 'cookie-parser';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { get } from 'http';
+import { createWriteStream } from 'fs';
 
+const serverUrl =
+  'https://nest-learningintro-git-master-bakemono-sans-projects.vercel.app';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useGlobalPipes(new ValidationPipe());
@@ -23,6 +27,37 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
+
+  get(`${serverUrl}/swagger/swagger-ui-bundle.js`, function (response) {
+    response.pipe(createWriteStream('public/swagger-ui-bundle.js'));
+    console.log(
+      `Swagger UI bundle file written to: '/public/swagger-ui-bundle.js'`,
+    );
+  });
+
+  get(`${serverUrl}/swagger/swagger-ui-init.js`, function (response) {
+    response.pipe(createWriteStream('public/swagger-ui-init.js'));
+    console.log(
+      `Swagger UI init file written to: '/public/swagger-ui-init.js'`,
+    );
+  });
+
+  get(
+    `${serverUrl}/swagger/swagger-ui-standalone-preset.js`,
+    function (response) {
+      response.pipe(
+        createWriteStream('public/swagger-ui-standalone-preset.js'),
+      );
+      console.log(
+        `Swagger UI standalone preset file written to: '/public/swagger-ui-standalone-preset.js'`,
+      );
+    },
+  );
+
+  get(`${serverUrl}/swagger/swagger-ui.css`, function (response) {
+    response.pipe(createWriteStream('public/swagger-ui.css'));
+    console.log(`Swagger UI css file written to: '/public/swagger-ui.css'`);
+  });
 
   await app.listen(3000);
 }
