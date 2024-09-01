@@ -10,23 +10,26 @@ export class AuthMiddleware implements NestMiddleware {
   ) {}
 
   use(req: any, res: any, next: () => void) {
-    const token = req.cookies.token || null;
+    const token = req.cookies.token ? req.cookies.token : null;
 
-    // Define Swagger and public routes that should not require authentication
-    const publicRoutes = [
+    // Liste des chemins à exclure de la vérification d'authentification
+    const excludedPaths = [
       '/swagger-ui.html',
       '/swagger-ui/',
+      '/v3/api-docs',
+      '/swagger-resources',
       '/api/swagger-ui-bundle.js',
       '/api/swagger-ui-standalone-preset.js',
       '/api/swagger-ui.css',
     ];
 
-    // Check if the request path matches any public route
-    if (publicRoutes.some((route) => req.path.startsWith(route))) {
+    // Vérifiez si le chemin de la requête doit être exclu
+    const isExcluded = excludedPaths.some((path) => req.path.startsWith(path));
+
+    if (isExcluded) {
       return next();
     }
 
-    // Check for token and verify if it's provided
     if (!token) {
       return res
         .status(401)
