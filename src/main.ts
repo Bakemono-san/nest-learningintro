@@ -5,25 +5,25 @@ import cookieParser from 'cookie-parser';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import yaml from 'yaml';
-import { writeFileSync } from 'fs';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
-  app.useStaticAssets(join(__dirname, '..', 'public'));
+  app.useStaticAssets(join(__dirname, '..', 'public')); // Serve static files from 'public'
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
   app.setViewEngine('ejs');
+
   const config = new DocumentBuilder()
     .setTitle('Gestion Dettes')
-    .setDescription('une appli pour la gestion des dettes')
+    .setDescription('Une appli pour la gestion des dettes')
     .setVersion('1.0')
     .addTag('Dettes')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
+
   await app.listen(3000);
 }
 bootstrap();
