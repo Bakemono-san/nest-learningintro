@@ -94,11 +94,12 @@ export class UsersService {
     }
 
     const payload = { userId: user.id };
-    const token = await this.jwtService.signAsync(payload);
+    const expiresIn = '5m';
+    const token = await this.jwtService.signAsync(payload, { expiresIn });
 
     res.cookie('token', token, {
       httpOnly: true,
-      // secure: true, // Uncomment in production
+      maxAge: 5 * 60 * 1000,
       path: '/',
     });
 

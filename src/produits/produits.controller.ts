@@ -11,7 +11,13 @@ import {
 import { ProduitsService } from './produits.service';
 import { CreateProduitDto } from './dto/create-produit.dto';
 import { UpdateProduitDto } from './dto/update-produit.dto';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBody,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 
 @ApiTags('produits')
 @Controller('produits')
@@ -20,7 +26,8 @@ export class ProduitsController {
 
   @Post()
   @ApiOperation({ summary: 'Create a new product' })
-  @ApiBody({ type: CreateProduitDto }) // Automatically documents the request body
+  @ApiBody({ type: CreateProduitDto })
+  @ApiBearerAuth()
   @ApiResponse({
     status: 201,
     description: 'The product has been successfully created.',
@@ -32,6 +39,7 @@ export class ProduitsController {
 
   @Get()
   @ApiOperation({ summary: 'Retrieve all products' })
+  @ApiBearerAuth()
   @ApiResponse({
     status: 200,
     description: 'The list of products has been successfully retrieved.',
@@ -42,6 +50,7 @@ export class ProduitsController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Retrieve a product by ID' })
+  @ApiBearerAuth()
   @ApiResponse({
     status: 200,
     description: 'The product has been successfully retrieved.',
@@ -53,7 +62,8 @@ export class ProduitsController {
 
   @Patch(':id')
   @ApiOperation({ summary: 'Update a product by ID' })
-  @ApiBody({ type: UpdateProduitDto }) // Automatically documents the request body
+  @ApiBearerAuth()
+  @ApiBody({ type: UpdateProduitDto })
   @ApiResponse({
     status: 200,
     description: 'The product has been successfully updated.',
@@ -68,6 +78,7 @@ export class ProduitsController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a product by ID' })
+  @ApiBearerAuth()
   @ApiResponse({
     status: 200,
     description: 'The product has been successfully deleted.',

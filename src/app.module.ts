@@ -22,13 +22,16 @@ import { Produit } from './produits/entities/produit.entity';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        type: 'mysql',
+        type: 'postgres',
         host: configService.get('host'),
         port: configService.get('port'),
         username: configService.get('username'),
         password: configService.get('password'),
         database: configService.get('database'),
         entities: [User, Produit],
+        ssl: {
+          rejectUnauthorized: false,
+        },
         synchronize: true,
       }),
       inject: [ConfigService],
@@ -60,7 +63,7 @@ export class AppModule implements NestModule {
       )
       .forRoutes(
         { path: 'users', method: RequestMethod.ALL },
-        { path: 'produits', method: RequestMethod.ALL },
+        { path: '/produits', method: RequestMethod.ALL },
       );
   }
 }

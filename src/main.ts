@@ -19,6 +19,11 @@ async function bootstrap() {
     .setDescription('Une appli pour la gestion des dettes')
     .setVersion('1.0')
     .addTag('Dettes')
+    .addBearerAuth({
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'access-token',
+    })
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

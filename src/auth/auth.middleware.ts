@@ -10,7 +10,7 @@ export class AuthMiddleware implements NestMiddleware {
   ) {}
   use(req: any, res: any, next: () => void) {
     const token = req.cookies.token ? req.cookies.token : null;
-    console.log(req.path);
+    console.log(token);
     if (!token) {
       return res
         .status(401)

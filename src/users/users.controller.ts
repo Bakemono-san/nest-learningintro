@@ -13,7 +13,13 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Response } from 'express';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBody,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 
 @ApiTags('users')
 @Controller('users')
@@ -38,6 +44,7 @@ export class UsersController {
     status: 200,
     description: 'The list of users has been successfully retrieved.',
   })
+  @ApiBearerAuth()
   findAll() {
     return this.usersService.findAll();
   }
@@ -48,6 +55,7 @@ export class UsersController {
     status: 200,
     description: 'The user has been successfully retrieved.',
   })
+  @ApiBearerAuth()
   @ApiResponse({ status: 404, description: 'User not found.' })
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.findOne(id);
@@ -55,6 +63,7 @@ export class UsersController {
 
   @Patch(':id')
   @ApiOperation({ summary: 'Update a user by ID' })
+  @ApiBearerAuth()
   @ApiBody({ type: UpdateUserDto })
   @ApiResponse({
     status: 200,
@@ -70,6 +79,7 @@ export class UsersController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a user by ID' })
+  @ApiBearerAuth()
   @ApiResponse({
     status: 200,
     description: 'The user has been successfully deleted.',
@@ -101,5 +111,16 @@ export class UsersController {
     @Res() res: Response,
   ) {
     return this.usersService.login(user, res);
+  }
+
+  @Post('logout')
+  @ApiOperation({ summary: 'User logout' })
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 200,
+    description: 'The user has been successfully logged out.',
+  })
+  logout(@Res() res: Response) {
+    return this.usersService.logout(res);
   }
 }
